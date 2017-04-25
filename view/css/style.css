@@ -1,0 +1,23 @@
+body
+{
+    margin: 0;
+    padding: 5px;
+}
+
+.container
+{
+    width: 40%;
+}
+
+.card
+{
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+#hidden_frame
+{
+    display: none;
+}
