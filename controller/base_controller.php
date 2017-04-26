@@ -28,8 +28,7 @@ class Base_Controller
             return $this->$action();
         } catch (Exception $e)
         {
-            $blocks = [$this->render_block($this->template, ["errors" => $e->getMessage()])];
-            return $this->render($blocks);
+            return $this->render_block("exceptions", ["errors" => [$e->getMessage()]]);
         }
     }
 

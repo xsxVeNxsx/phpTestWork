@@ -8,15 +8,16 @@ class Auth_Controller extends Base_Controller
     public function __construct()
     {
         $this->title = "Authentication";
-        //$this->scripts = array_merge($this->scripts, ["auth"]);
         $this->styles = array_merge($this->styles, ["signin"]);
         $this->actions = array_merge($this->actions, ["signin", "signout"]);
     }
 
     public function index()
     {
-        $blocks = [$this->render_block("navbar"),
-                   $this->render_block("auth_form")];
+        $blocks = [
+            $this->render_block("navbar"),
+            $this->render_block("auth_form")
+        ];
         $this->render($blocks);
     }
 

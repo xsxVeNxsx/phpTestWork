@@ -14,9 +14,11 @@ class Index_Controller extends Base_Controller
     public function index()
     {
         $public_form_block = $this->render_block("public_comments_form_block");
-        $blocks = [$this->render_block("navbar"),
-                   $this->render_block("comments_list"),
-                   $this->render_block("comments_form", ["block" => $public_form_block])];
+        $blocks = [
+            $this->render_block("navbar"),
+            $this->render_block("comments_list"),
+            $this->render_block("comments_form", ["block" => $public_form_block])
+        ];
         $this->render($blocks);
     }
 }

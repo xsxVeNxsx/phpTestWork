@@ -4,6 +4,7 @@ require_once "config.php";
 require_once "base_controller.php";
 require_once "model/comments_model.php";
 require_once "model/users_model.php";
+include_once "validation/comments_validation.php";
 
 class Comments_Controller extends Base_Controller
 {
@@ -15,6 +16,7 @@ class Comments_Controller extends Base_Controller
 
     public function add()
     {
+        (new Comments_Validation())->check($_POST);
         $extention = explode("/", $_FILES['file']['type'])[1];
         $tmp_file = $_FILES['file']['tmp_name'];
         $new_file = mt_rand().".$extention";
@@ -28,7 +30,6 @@ class Comments_Controller extends Base_Controller
         (new Comments_Model())->add(
             array_merge($_POST, ["img" => $new_file, "approved" => 0, "date" => date("Y-m-d H:i:s")])
         );
-        return "OK";
     }
 
     public function edit()
@@ -37,7 +38,6 @@ class Comments_Controller extends Base_Controller
         $params["set"] = $_POST;
         $params["set"]["edited"] = 1;
         (new Comments_Model())->edit($params);
-        return "OK";
     }
 
     public function get_comments()
@@ -58,6 +58,9 @@ class Comments_Controller extends Base_Controller
     {
         $imagecreatefrom_f = "imagecreatefrom$extention";
         $image_f = "image$extention";
+        $size = getimagesize($tmp_file);
+        if (!$size || !in_array($size["mime"], ["image/jpeg", "image/gif", "image/png", "image/jpg"]))
+            throw new Exception("Incorrect file format");
         $img = $imagecreatefrom_f($tmp_file);
         $new_width = $width = imagesx($img);
         $new_height = $height = imagesy($img);

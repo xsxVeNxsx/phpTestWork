@@ -7,7 +7,6 @@ require_once "model/users_model.php";
 
 class Admin_Controller extends Base_Controller
 {
-
     public function __construct()
     {
         $this->title = "Admin Page";
@@ -19,9 +18,11 @@ class Admin_Controller extends Base_Controller
     public function index()
     {
         $admin_buttons = $this->render_block("admin_comments_form_block");
-        $blocks = [$this->render_block("navbar"),
-                   $this->render_block("comments_list", ["is_admin" => true]),
-                   $this->render_block("comments_form", ["is_admin" => true, "block" => $admin_buttons])];
+        $blocks = [
+            $this->render_block("navbar"),
+            $this->render_block("comments_list", ["is_admin" => true]),
+            $this->render_block("comments_form", ["is_admin" => true, "block" => $admin_buttons])
+        ];
         $this->render($blocks);
     }
 }

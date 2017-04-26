@@ -5,7 +5,7 @@ function load_comments()
     $.ajax({
         method: 'GET',
         url: url,
-        success: function(data){
+        success: function(data) {
             $("#comments_block").children().remove();
             for (var i = 0; i < data.length; ++i)
                 $("#comments_block").append(
@@ -17,8 +17,8 @@ function load_comments()
                         $("<div/>", {"class": "card-block d-inline-block row_right"}).append
                         (
                             $("<p/>", {"class": "card-text text-right"}).append(
-                                $("<small/>", {"class": "text-muted text-danger"}).append(data[i]["edited"]*1 ? "(Edited) " : ""),
-                                $("<small/>", {"class": "text-muted"}).append(data[i]["date"])
+                                $("<small/>", {"class": "text-muted text-danger"}).append(data[i]["edited"] * 1 ? "(Edited) " : ""),
+                                $("<small/>", {"class": "text-muted comment_date"}).append(data[i]["date"])
                             ),
                             $("<h4/>", {"class": "card-title comment_author"}).append(data[i]["author"]),
                             $("<h6/>", {"class": "card-subtitle mb-2 text-muted comment_email"}).append(data[i]["email"]),
@@ -38,10 +38,49 @@ function load_comments()
                         })
                     )
                 );
-                if (is_admin)
-                    init_admin_edit_form();
-            }
+            show_errors();
+            if (!is_admin)
+                return
+            $(".comment").append(
+                $("<div/>", {"class": "d-inline-block row_left admin_buttons"}).append
+                (
+                    $("<button/>", {
+                        "type": "button",
+                        "class": "btn btn-success float-left",
+                        "name": "approve",
+                        "id": "approve",
+                        "text": "Approve"
+                    }),
+                    $("<button/>", {
+                        "type": "button",
+                        "class": "btn btn-danger float-left",
+                        "name": "unapprove",
+                        "id": "unapprove",
+                        "text": "Unapprove"
+                    }),
+                    $("<button/>", {
+                        "type": "button",
+                        "class": "btn btn-primary float-left",
+                        "name": "edit",
+                        "id": "edit",
+                        "text": "Edit"
+                    })
+                )
+            );
+            init_admin_comments_list();
+        }
     });
+}
+
+function show_errors()
+{
+    var div = $($("#hidden_frame")[0].contentWindow.document).find("#frame_errors");
+    $(".alert").remove();
+    if (div.length == 0)
+        return;
+    $("#comment_form").prepend(
+        $("<div/>", {"class": "alert alert-danger", "text": div.text()}).append()
+    )
 }
 
 function on_document_ready()
