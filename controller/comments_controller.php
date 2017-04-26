@@ -10,7 +10,7 @@ class Comments_Controller extends Base_Controller
     public function __construct()
     {
         $this->title = "Comments";
-        $this->actions = array_merge($this->actions, ["add", "get_comments", "get_approved_comments"]);
+        $this->actions = array_merge($this->actions, ["add", "edit", "get_comments", "get_approved_comments"]);
     }
 
     public function add()
@@ -18,7 +18,19 @@ class Comments_Controller extends Base_Controller
         $tmp_file = $_FILES['file']['tmp_name'];
         $new_file = mt_rand().".jpg";
         $this->resize_img($tmp_file, $new_file, Config::get("Img", "max_width"), Config::get("Img", "max_height"));
-        (new Comments_Model())->add($_POST + ["img" => $new_file, "approved" => 0, "date" => date("Y-m-d H:i:s")]);
+        (new Comments_Model())->add(
+            array_merge($_POST, ["img" => $new_file, "approved" => 0, "date" => date("Y-m-d H:i:s")])
+        );
+        return "OK";
+    }
+
+    public function edit()
+    {
+        $params["where"] = ["id" => $_POST["id"]];
+        $params["set"] = $_POST;
+        $params["set"]["edited"] = 1;
+        (new Comments_Model())->edit($params);
+        return "OK";
     }
 
     public function get_comments()
@@ -26,8 +38,7 @@ class Comments_Controller extends Base_Controller
         if (!Sessions::is_authorized())
             $this->get_approved_comments();
         header('Content-Type: application/json');
-        $var =  json_encode((new Comments_Model())->all());
-        return $var;
+        return json_encode((new Comments_Model())->all());
     }
 
     public function get_approved_comments()

@@ -11,7 +11,7 @@
     </head>
     <body>
         <script>init_config("<?php echo $img_url?>", "<?php echo $home_url?>", "<?php echo $is_authed?>")</script>
-        <div class="container">
+        <div class="container" id="main_container">
             <?php foreach ($blocks as $block)
                 echo $block;
             ?>
