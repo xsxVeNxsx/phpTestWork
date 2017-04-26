@@ -15,9 +15,16 @@ class Comments_Controller extends Base_Controller
 
     public function add()
     {
+        $extention = explode("/", $_FILES['file']['type'])[1];
         $tmp_file = $_FILES['file']['tmp_name'];
-        $new_file = mt_rand().".jpg";
-        $this->resize_img($tmp_file, $new_file, Config::get("Img", "max_width"), Config::get("Img", "max_height"));
+        $new_file = mt_rand().".$extention";
+        $this->resize_img(
+            $tmp_file,
+            $new_file,
+            $extention,
+            intval(Config::get("Img", "max_width")),
+            intval(Config::get("Img", "max_height"))
+        );
         (new Comments_Model())->add(
             array_merge($_POST, ["img" => $new_file, "approved" => 0, "date" => date("Y-m-d H:i:s")])
         );
@@ -47,19 +54,21 @@ class Comments_Controller extends Base_Controller
         return json_encode((new Comments_Model())->approved());
     }
 
-    protected function resize_img($tmp_file, $new_file, $max_width, $max_height)
+    protected function resize_img($tmp_file, $new_file, $extention, $max_width, $max_height)
     {
-        $img = imagecreatefromjpeg($tmp_file);
+        $imagecreatefrom_f = "imagecreatefrom$extention";
+        $image_f = "image$extention";
+        $img = $imagecreatefrom_f($tmp_file);
         $new_width = $width = imagesx($img);
         $new_height = $height = imagesy($img);
         if ($width > $max_width or $height > $max_height)
         {
-            $w_or_h = $max_width > $max_height ? true : false;
-            $new_width = $w_or_h ? $max_width : floor($width * ($max_height / $height));
-            $new_height = $w_or_h ? floor($height * ($max_width / $width)) : $max_height;
+            $h_or_w = $height > $width? true : false;
+            $new_width = $h_or_w ? $max_width : floor($width * ($max_height / $height));
+            $new_height = $h_or_w ? floor($height * ($max_width / $width)) : $max_height;
         }
         $tmp_img = imagecreatetruecolor($new_width, $new_height);
         imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-        imagejpeg($tmp_img, getcwd()."/".Config::get("Dir", "img").$new_file);
+        $image_f($tmp_img, getcwd()."/".Config::get("Dir", "img").$new_file);
     }
 }
