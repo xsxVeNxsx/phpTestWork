@@ -13,13 +13,15 @@ class Admin_Controller extends Base_Controller
         $this->title = "Admin Page";
         $this->need_auth = true;
         $this->actions = array_merge($this->actions, ["index"]);
-        $this->scripts = array_merge($this->scripts, ["comments"]);
+        $this->scripts = array_merge($this->scripts, ["comments", "admin"]);
     }
 
     public function index()
     {
+        $admin_buttons = $this->render_block("admin_comments_form_block");
         $blocks = [$this->render_block("navbar"),
-                   $this->render_block("comments_list")];
+                   $this->render_block("comments_list", ["is_admin" => true]),
+                   $this->render_block("comments_form", ["is_admin" => true, "block" => $admin_buttons])];
         $this->render($blocks);
     }
 }
