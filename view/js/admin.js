@@ -1,7 +1,7 @@
 function init_admin_edit_form()
 {
     var form = $("#comment_form");
-    form.attr("action", "?controller=comments&action=edit");
+    form.attr("action", "?controller=admin&action=edit_comment");
     form.addClass("invisible");
     form.append($("<input/>", {"class": "invisible", "type": "text", "name": "id"}));
     form.append($("<input/>", {"class": "invisible", "type": "text", "name": "date"}));
@@ -21,10 +21,12 @@ function init_admin_comments_list()
         comment.find("#approve,#unapprove").on("click", function(){
             var value = $(this).attr("id") == "approve" ? 1 : 0;
             comment.find("input[name='approved']").val(value);
+            $("#comment_form").attr("action", "?controller=admin&action=change_comment_status");
             fill_form(comment);
             $("#comment_form").find("#save").click();
         });
         comment.find("#edit").on("click", function(){
+            $("#comment_form").attr("action", "?controller=admin&action=edit_comment");
             fill_form(comment);
             $("#comment_form #cancel").click();
             $("#comment_form").insertAfter(comment);

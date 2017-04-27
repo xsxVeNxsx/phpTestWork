@@ -1,6 +1,7 @@
 function load_comments() {
     var is_admin = url_param("controller", "index") == "admin",
-        url = "?controller=comments&action=" + (is_admin ? "get_comments" : "get_approved_comments") + order_string();
+        url = "?controller=" + (is_admin ? "admin" : "comments") + "&action=get_comments" + order_string();
+    $("button,input,textarea").attr('disabled','disabled');
     $.ajax({
         method: 'GET',
         url: url,
@@ -33,8 +34,10 @@ function load_comments() {
                 );
             }
             show_alerts();
-            if (!is_admin)
+            if (!is_admin) {
+                $("button,input,textarea").removeAttr('disabled');
                 return;
+            }
             $(".comment").append(
                 $("<div/>", {"class": "d-inline-block row_left admin_buttons"}).append
                 (
@@ -44,6 +47,7 @@ function load_comments() {
                 )
             );
             init_admin_comments_list();
+            $("button,input,textarea").removeAttr('disabled');
         }
     });
 }
