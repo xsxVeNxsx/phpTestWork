@@ -4,23 +4,23 @@ Requared config.ini file at the root of the server.
 
 config.ini:
 
-[Dir]
+[Dir]  
 img=../testWorkImg/
 
-[DB]
-host=localhost
-name=testwork
-user=admin
-pass=admin
+[DB]  
+host=localhost  
+name=testwork  
+user=admin  
+pass=admin  
 salt=oZCgpOl$s
 
-[URL]
-home=http://localhost/testWork/
+[URL]  
+home=http://localhost/testWork/  
 img=http://localhost/testWorkImg/
 
-[Img]
-max_width=320
+[Img]  
+max_width=320  
 max_height=240
 
-[global]
+[global]  
 timezone=Asia/Vladivostok
