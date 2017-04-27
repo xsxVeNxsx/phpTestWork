@@ -45,13 +45,13 @@ class Comments_Controller extends Base_Controller
         if (!Sessions::is_authorized())
             $this->get_approved_comments();
         header('Content-Type: application/json');
-        return json_encode((new Comments_Model())->all());
+        return json_encode((new Comments_Model())->all($_GET));
     }
 
     public function get_approved_comments()
     {
         header('Content-Type: application/json');
-        return json_encode((new Comments_Model())->approved());
+        return json_encode((new Comments_Model())->approved($_GET));
     }
 
     protected function resize_img($tmp_file, $new_file, $extention, $max_width, $max_height)

@@ -31,9 +31,15 @@ class Base_Model
                 WHERE",
                 " AND ",
                 array_intersect(array_keys($params),
-                array_merge($this->fields, ["id"]))
+                    array_merge($this->fields, ["id"]))
             );
-        $order = count($order) ? $order : $this->order;
+        if (count($order) && isset($order["order_field"]))
+        {
+            $order["field"] = $order["order_field"];
+            $order["rule"] = isset($order["order_rule"]) ? $order["order_rule"] : "ASC";
+        }
+        else
+            $order = $this->order;
         $order_by = "ORDER BY " . $order["field"] . " " . $order["rule"];
         $q = $this->db->prepare("SELECT * FROM $this->table_name $where $order_by");
         $q->execute(array_values($params));

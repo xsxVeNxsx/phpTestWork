@@ -1,11 +1,10 @@
-function load_comments()
-{
-    var is_admin = url_param("controller", "index") == "admin";
-    var url = "?controller=comments&action=" + (is_admin ? "get_comments" : "get_approved_comments");
+function load_comments() {
+    var is_admin = url_param("controller", "index") == "admin",
+        url = "?controller=comments&action=" + (is_admin ? "get_comments" : "get_approved_comments") + order_string();
     $.ajax({
         method: 'GET',
         url: url,
-        success: function(data) {
+        success: function (data) {
             $("#comments_block").children().remove();
             for (var i = 0; i < data.length; ++i)
                 $("#comments_block").append(
@@ -72,21 +71,32 @@ function load_comments()
     });
 }
 
-function show_errors()
+function order_string()
 {
-    var div = $($("#hidden_frame")[0].contentWindow.document).find("#frame_errors");
-    $(".alert").remove();
-    if (div.length == 0)
-        return;
-    $("#comment_form").prepend(
-        $("<div/>", {"class": "alert alert-danger", "text": div.text()}).append()
-    )
+    var result = ""
+    $.each($("#order_fields button"), function(key, button) {
+        if ($(button).attr("id") == undefined)
+            return;
+        result += "&order_field=" + $(button).attr("name");
+        result += "&order_rule=" + $(button).attr("id").split("_")[0].toUpperCase()
+    });
+    return result;
 }
 
-function on_document_ready()
-{
-    load_comments();
+$(document).ready(function () {
     $("#hidden_frame").on("load", function() {load_comments()});
-}
-
-$(document).ready(on_document_ready);
+    $("#order_fields button").on("click", function (){
+        var id_val = "asc_order_field";
+        switch_val = {"asc": "desc", "desc": "asc"};
+        text_prefix = {"asc_order_field": "↑", "desc_order_field": "↓"};
+        if ($(this).attr("id") != undefined)
+            id_val = switch_val[$(this).attr("id").split("_")[0]] + "_order_field";
+        $.each($("#order_fields button"), function(i, button){
+            $(button).removeAttr("id").text($(button).text().replace(/↑|↓|\s/g, ""));
+        });
+        $(this).attr("id", id_val);
+        $(this).text($(this).text() + " " + text_prefix[id_val]);
+        load_comments();
+    })
+    load_comments();
+});
