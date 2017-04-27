@@ -28,7 +28,7 @@ class Base_Controller
             return $this->$action();
         } catch (Exception $e)
         {
-            return $this->render_block("exceptions", ["errors" => [$e->getMessage()]]);
+            return $this->render_block("frame_messages", ["errors" => [$e->getMessage()]]);
         }
     }
 
@@ -41,7 +41,9 @@ class Base_Controller
             "styles" => $this->styles,
             "is_authed" => Sessions::is_authorized(),
             "img_url" => Config::get("URL", "img"),
-            "home_url" => $this->home_url
+            "home_url" => $this->home_url,
+            "img_max_width" => Config::get("Img", "max_width"),
+            "img_max_height" => Config::get("Img", "max_height"),
         ];
         extract(array_merge($vars, $common_vars));
         include "view/$this->template.php";

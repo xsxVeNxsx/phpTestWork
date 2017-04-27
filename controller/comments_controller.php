@@ -30,6 +30,7 @@ class Comments_Controller extends Base_Controller
         (new Comments_Model())->add(
             array_merge($_POST, ["img" => $new_file, "approved" => 0, "date" => date("Y-m-d H:i:s")])
         );
+        return $this->render_block("frame_messages", ["success" => "Comment added successfully"]);
     }
 
     public function edit()
@@ -38,6 +39,7 @@ class Comments_Controller extends Base_Controller
         $params["set"] = $_POST;
         $params["set"]["edited"] = 1;
         (new Comments_Model())->edit($params);
+        return $this->render_block("frame_messages", ["success" => "Comment edited successfully"]);
     }
 
     public function get_comments()

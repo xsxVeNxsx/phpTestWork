@@ -1,6 +1,7 @@
 <div id="comments_form_block" class="container <?php if (isset($is_admin)) echo "invisible"?>">
-    <h2 class="form-signin-heading">Add comment</h2>
+    <h2 class="form-signin-heading" id="comment_form_title">Add comment</h2>
     <form action="?controller=comments&action=add" enctype="multipart/form-data" method="POST" id="comment_form" target="hidden_frame">
+        <?php if (isset($alerts)) echo $alerts?>
         <div class="row">
             <div class="d-inline-block row_left">
                 <div class="form-group">

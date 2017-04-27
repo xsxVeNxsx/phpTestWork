@@ -7,22 +7,16 @@ function load_comments() {
         success: function (data) {
             $("#comments_block").children().remove();
             for (var i = 0; i < data.length; ++i)
-                $("#comments_block").append(
-                    $("<div/>", {"class": "row comment", "id": "comment_" + data[i]["id"]}).append(
-                        $("<div/>", {"class": "d-inline-block row_left"}).append
-                        (
-                            $("<img/>", {"class": "card-img-top", "src": Config["img_url"] + data[i]["img"]})
-                        ),
-                        $("<div/>", {"class": "card-block d-inline-block row_right"}).append
-                        (
-                            $("<p/>", {"class": "card-text text-right"}).append(
-                                $("<small/>", {"class": "text-muted text-danger"}).append(data[i]["edited"] * 1 ? "(Edited) " : ""),
-                                $("<small/>", {"class": "text-muted comment_date"}).append(data[i]["date"])
-                            ),
-                            $("<h4/>", {"class": "card-title comment_author"}).append(data[i]["author"]),
-                            $("<h6/>", {"class": "card-subtitle mb-2 text-muted comment_email"}).append(data[i]["email"]),
-                            $("<p/>", {"class": "card-text comment_msg"}).append(data[i]["msg"])
-                        ),
+            {
+                data[i]["img"] = Config["img_url"] + data[i]["img"];
+                var blocks = main_comment_objects(data[i]);
+
+                $("#comments_block").append
+                (
+                    $("<div/>", {"class": "row comment", "id": "comment_" + data[i]["id"]}).append
+                    (
+                        blocks["left_block"],
+                        blocks["right_block"],
                         $("<input/>", {
                             "class": "invisible",
                             "type": "text",
@@ -37,37 +31,52 @@ function load_comments() {
                         })
                     )
                 );
-            show_errors();
+            }
+            show_alerts();
             if (!is_admin)
-                return
+                return;
             $(".comment").append(
                 $("<div/>", {"class": "d-inline-block row_left admin_buttons"}).append
                 (
-                    $("<button/>", {
-                        "type": "button",
-                        "class": "btn btn-success float-left",
-                        "name": "approve",
-                        "id": "approve",
-                        "text": "Approve"
-                    }),
-                    $("<button/>", {
-                        "type": "button",
-                        "class": "btn btn-danger float-left",
-                        "name": "unapprove",
-                        "id": "unapprove",
-                        "text": "Unapprove"
-                    }),
-                    $("<button/>", {
-                        "type": "button",
-                        "class": "btn btn-primary float-left",
-                        "name": "edit",
-                        "id": "edit",
-                        "text": "Edit"
-                    })
+                    button("button", "btn btn-success float-left", "approve", "approve", "Approve"),
+                    button("button", "btn btn-danger float-left", "unapprove", "unapprove", "Unapprove"),
+                    button("button", "btn btn-primary float-left", "edit", "edit", "Edit")
                 )
             );
             init_admin_comments_list();
         }
+    });
+}
+
+function main_comment_objects(data)
+{
+    return {
+        "left_block": $("<div/>", {"class": "d-inline-block row_left"}).append
+        (
+            $("<img/>", {"class": "card-img-top", "src": data["img"]})
+        ),
+        "right_block": $("<div/>", {"class": "card-block d-inline-block row_right"}).append
+        (
+            $("<p/>", {"class": "card-text text-right"}).append
+            (
+                $("<small/>", {"class": "text-muted text-danger"}).append(data["edited"] * 1 ? "(Edited) " : ""),
+                $("<small/>", {"class": "text-muted comment_date"}).append(data["date"])
+            ),
+            $("<h4/>", {"class": "card-title comment_author"}).append(data["author"]),
+            $("<h6/>", {"class": "card-subtitle mb-2 text-muted comment_email"}).append(data["email"]),
+            $("<p/>", {"class": "card-text comment_msg"}).append(data["msg"])
+        )
+    };
+}
+
+function button(_type, _class, _name, _id, _text)
+{
+    return $("<button/>", {
+        "type": _type,
+        "class": _class,
+        "name": _name,
+        "id": _id,
+        "text": _text
     });
 }
 

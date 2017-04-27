@@ -1,10 +1,12 @@
-Config = {"img_url": "", "home_url": "", "is_authed": false}
+Config = {"img_url": "", "home_url": "", "is_authed": false, "img_max_width": 320, "img_max_height": 240}
 
-function init_config(img_url, home_url, is_authed)
+function init_config(img_url, home_url, is_authed, img_max_width, img_max_height)
 {
     Config["img_url"] = img_url;
     Config["home_url"] = home_url;
     Config["is_authed"] = is_authed;
+    Config["img_max_width"] = img_max_width * 1;
+    Config["img_max_height"] = img_max_height * 1;
 }
 
 function url_param(name, def)
@@ -29,20 +31,15 @@ function init_links()
     });
 }
 
-function show_errors()
+function show_alerts()
 {
-    var div = $($("#hidden_frame")[0].contentWindow.document).find("#frame_errors");
-    $(".alert").remove();
-    if (div.length == 0)
-        return;
-    $("#comment_form").prepend(
-        $("<div/>", {"class": "alert alert-danger", "text": div.text()}).append()
-    )
-}
-
-function get_order_by_url()
-{
-    url_param
+    var errors = $($("#hidden_frame")[0].contentWindow.document).find("#errors"),
+        success = $($("#hidden_frame")[0].contentWindow.document).find("#success");
+    $(".alert").addClass("invisible");
+    if (errors.length > 0)
+        $("#error_alert").removeClass("invisible").text(errors.text());
+    if (success.length > 0)
+        $("#success_alert").removeClass("invisible").text(success.text());
 }
 
 $(document).ready(init_links);

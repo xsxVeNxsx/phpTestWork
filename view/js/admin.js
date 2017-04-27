@@ -5,7 +5,8 @@ function init_admin_edit_form()
     form.addClass("invisible");
     form.append($("<input/>", {"class": "invisible", "type": "text", "name": "id"}));
     form.append($("<input/>", {"class": "invisible", "type": "text", "name": "date"}));
-    form.append(
+    form.append
+    (
         $("<input/>", {"class": "invisible", "type": "text", "name": "approved"}),
         $("<input/>", {"class": "invisible", "type": "text", "name": "edited"})
     );

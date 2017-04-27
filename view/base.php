@@ -10,7 +10,9 @@
         <title><?php echo $title?></title>
     </head>
     <body>
-        <script>init_config("<?php echo $img_url?>", "<?php echo $home_url?>", "<?php echo $is_authed?>")</script>
+        <script>
+            <?php echo "init_config('$img_url', '$home_url', '$is_authed', '$img_max_width', '$img_max_height')" ?>
+        </script>
         <div class="container" id="main_container">
             <?php foreach ($blocks as $block)
                 echo $block;

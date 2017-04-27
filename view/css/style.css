@@ -46,7 +46,7 @@ body
     word-wrap: break-word;
 }
 
-.row_left .btn
+.row_left .btn, .row_right .btn
 {
     margin-right: 10px;
 }
