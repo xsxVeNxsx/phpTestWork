@@ -3,5 +3,5 @@
     <button type="button" class="btn btn-secondary" name="email">Email</button>
     <button type="button" class="btn btn-secondary" id="desc_order_field" name="date">Date ↓</button>
 </div>
-<div id="comments_block" class="<?php if (!isset($is_admin)) echo "pre-scrollable container"?>">
+<div id="comments_block" class="container <?php if (!isset($is_admin)) echo "pre-scrollable container"?>">
 </div>

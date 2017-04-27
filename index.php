@@ -1,7 +1,7 @@
 <?php
 
-//error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-error_reporting(0);
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+
 require_once "config.php";
 require_once "controller/index_controller.php";
 require_once "controller/auth_controller.php";
