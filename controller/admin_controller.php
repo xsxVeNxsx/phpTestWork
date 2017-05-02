@@ -21,7 +21,8 @@ class Admin_Controller extends Base_Controller
         $blocks = [
             $this->render_block("navbar"),
             $this->render_block("comments_list", ["is_admin" => true]),
-            $this->render_block("comments_form", ["is_admin" => true, "block" => $admin_buttons])
+            $this->render_block("comments_form", ["is_admin" => true, "block" => $admin_buttons]),
+            $this->render_block("hidden_frame")
         ];
         $this->render($blocks);
     }
@@ -45,6 +46,6 @@ class Admin_Controller extends Base_Controller
     public function get_comments()
     {
         header('Content-Type: application/json');
-        return json_encode((new Comments_Model())->all($_GET));
+        return json_encode((new Comments_Model())->all($_GET, $_GET));
     }
 }

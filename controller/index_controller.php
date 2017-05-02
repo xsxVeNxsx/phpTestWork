@@ -18,7 +18,8 @@ class Index_Controller extends Base_Controller
         $blocks = [
             $this->render_block("navbar"),
             $this->render_block("comments_list"),
-            $this->render_block("comments_form", ["block" => $public_form_block, "alerts" => $alerts])
+            $this->render_block("comments_form", ["block" => $public_form_block, "alerts" => $alerts]),
+            $this->render_block("hidden_frame")
         ];
         $this->render($blocks);
     }

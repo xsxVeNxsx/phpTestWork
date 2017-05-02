@@ -42,4 +42,7 @@ function show_alerts()
         $("#success_alert").removeClass("invisible").text(success.text());
 }
 
-$(document).ready(init_links);
+$(document).ready(function () {
+    init_links();
+    $("#hidden_frame").on("load", show_alerts);
+});
