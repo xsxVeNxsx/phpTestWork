@@ -36,7 +36,7 @@ class Comments_Controller extends Base_Controller
     public function get_comments()
     {
         header('Content-Type: application/json');
-        return json_encode((new Comments_Model())->approved($_GET));
+        return json_encode((new Comments_Model())->approved($_GET, $_GET));
     }
 
     protected function resize_img($tmp_file, $new_file, $extention, $max_width, $max_height)

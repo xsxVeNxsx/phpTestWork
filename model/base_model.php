@@ -17,13 +17,21 @@ class Base_Model
         $this->db = $DB->db;
     }
 
-    protected function glue_params($oper, $seporator, $keys)
+    private function glue_params($oper, $seporator, $keys)
     {
         $keys = array_map(function ($i) {return "$i = ?";}, $keys);
         return "$oper " . implode("$seporator", $keys);
     }
 
-    public function get($params = [], $order = [])
+    private function limit($pagination)
+    {
+        if (!isset($pagination["page_size"]))
+            return "";
+        $start = ($pagination["page"] - 1) * $pagination["page_size"];
+        return "LIMIT $start, ".$pagination["page_size"];
+    }
+
+    private function query($select, $pdo_method, $params = [], $order = [], $pagination = [])
     {
         $where = "";
         if (count($params))
@@ -41,9 +49,24 @@ class Base_Model
         else
             $order = $this->order;
         $order_by = "ORDER BY " . $order["field"] . " " . $order["rule"];
-        $q = $this->db->prepare("SELECT * FROM $this->table_name $where $order_by");
+        $limit = $pagination == [] ? "" : $this->limit($pagination);
+        $q = $this->db->prepare("$select FROM $this->table_name $where $order_by $limit");
         $q->execute(array_values($params));
-        return $q->fetchAll(PDO::FETCH_ASSOC);
+        return $q->fetchAll($pdo_method);
+    }
+
+    public function get($params = [], $order = [], $pagination = [])
+    {
+        $count = intval($this->count($params)[0]);
+        if (!isset($pagination["page"]) || $pagination["page"] > ceil($count / intval($pagination["page_size"])))
+            $pagination["page"] = 1;
+        $data = $this->query("SELECT *" , PDO::FETCH_ASSOC, $params, $order, $pagination);
+        return ["data" => $data, "count" => $count, "page" => $pagination["page"]];
+    }
+
+    public function count($params = [])
+    {
+        return $this->query("SELECT count(*)" , PDO::FETCH_COLUMN, $params);
     }
 
     public function add($params)

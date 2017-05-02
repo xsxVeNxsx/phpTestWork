@@ -65,9 +65,24 @@ body
     margin-top: 1rem;
 }
 
-#order_fields
+#page_size
+{
+    width: 70px;
+    float: right;
+    height: 36px;
+}
+
+#order_pagination_fields
 {
     margin-top: 10px;
+    height: 36px;
+    width: 100%;
+}
+
+#pagination_fields
+{
+    position: absolute;
+    right: 0px;
 }
 
 .invisible

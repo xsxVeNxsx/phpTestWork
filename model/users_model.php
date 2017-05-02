@@ -24,6 +24,6 @@ class Users_Model extends Base_Model
             "name" => $params["name"],
             "password" => md5(Config::get("DB", "salt").$params["password"])
             ]
-        )) > 0;
+        )['data']) > 0;
     }
 }

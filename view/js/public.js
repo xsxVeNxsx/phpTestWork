@@ -44,6 +44,7 @@ function create_preview()
             $("<div/>", {"class": "d-inline-block row_left admin_buttons"}).append
             (
                 button("button", "btn btn-primary float-left", "submit2", "submit2", "Submit").on("click", function (){
+                    $(".admin_buttons").find("#cancel").click();
                     $("#comment_form").find("#submit").click();
                 }),
                 button("button", "btn btn-warning float-left", "cancel", "cancel", "Cancel").on("click", function (){
