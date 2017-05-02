@@ -21,11 +21,15 @@ function create_preview()
     {
         var width = $(this).width(),
             height = $(this).height();
-        if (width > Config["img_max_width"] || height > Config["img_max_height"])
+        if ($(this).height() > Config["img_max_height"])
         {
-            var h_or_w = height > width? true : false;
-            $(this).width(h_or_w ? Config["img_max_width"] : Math.floor(width * (Config["img_max_height"] / height)));
-            $(this).height(h_or_w ? Math.floor(height * (Config["img_max_width"] / width)) : Config["img_max_height"]);
+            $(this).height(Config["img_max_height"]);
+            $(this).width( Math.floor(width * (Config["img_max_height"] / height)));
+        }
+        if ($(this).width() > Config["img_max_width"])
+        {
+            $(this).width(Config["img_max_width"]);
+            $(this).height(Math.floor(height * (Config["img_max_width"] / width)));
         }
         $(this).removeClass("invisible");
     }

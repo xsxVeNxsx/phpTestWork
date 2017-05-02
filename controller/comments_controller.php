@@ -49,11 +49,15 @@ class Comments_Controller extends Base_Controller
         $img = $imagecreatefrom_f($tmp_file);
         $new_width = $width = imagesx($img);
         $new_height = $height = imagesy($img);
-        if ($width > $max_width or $height > $max_height)
+        if ($new_height > $max_height)
         {
-            $h_or_w = $height > $width? true : false;
-            $new_width = $h_or_w ? $max_width : floor($width * ($max_height / $height));
-            $new_height = $h_or_w ? floor($height * ($max_width / $width)) : $max_height;
+            $new_height = $max_height;
+            $new_width = floor($width * ($max_height / $height));
+        }
+        if ($new_width > $max_width)
+        {
+            $new_width = $max_width;
+            $new_height = floor($height * ($max_width / $width));
         }
         $tmp_img = imagecreatetruecolor($new_width, $new_height);
         imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
